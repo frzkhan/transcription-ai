@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Deepgram Test</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- <link rel="stylesheet" href="style.css" /> -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.5.13/dist/vue.global.min.js"></script>
+  </head>
+
+  <body class="bg-gray-900 text-white">
+    <div id="app">
+      <div class="flex flex-row">
+        <div class="h-screen w-1/2 flex flex-col p-2">
+          <div class="flex items-center pb-2">
+            <div class="cursor-pointer" @click="start">
+              <svg
+                class="w-6 fill-current text-green-500"
+                :class="{ 'text-red-500 animate-pulse': microphone }"
+                version="1.1"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                x="0px"
+                y="0px"
+                viewBox="0 0 1000 1000"
+                enable-background="new 0 0 1000 1000"
+                xml:space="preserve"
+              >
+                <g>
+                  <path
+                    d="M500,683.8c84.6,0,153.1-68.6,153.1-153.1V163.1C653.1,78.6,584.6,10,500,10c-84.6,0-153.1,68.6-153.1,153.1v367.5C346.9,615.2,415.4,683.8,500,683.8z M714.4,438.8v91.9C714.4,649,618.4,745,500,745c-118.4,0-214.4-96-214.4-214.4v-91.9h-61.3v91.9c0,141.9,107.2,258.7,245,273.9v124.2H346.9V990h306.3v-61.3H530.6V804.5c137.8-15.2,245-132.1,245-273.9v-91.9H714.4z"
+                  />
+                </g>
+              </svg>
+            </div>
+            
+            <!-- <button class="text-sm bg-white text-black px-3 py-1 mx-2 rounded">Upload</button> -->
+          </div>
+          <div id="transcript" class="overflow-scroll">
+            <div v-for="(transcripts, index) in transcriptons" :key="index">
+              <div v-for="(transcript, i) in transcripts" :key="i">
+                <span
+                  class="bg-blue-500 text-white px-1 rounded mr-2 inline-block w-24 text-center text-sm"
+                  >{{ transcript.start.toFixed(2) }} - {{
+                  transcript.end.toFixed(2) }}</span
+                ><strong>Person {{ transcript.speaker + 1 }}</strong>: {{
+                transcript.word }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="h-screen w-1/2 flex flex-col p-2">
+          <div class="grow overflow-scroll" id="chat">
+            <div
+              v-for="(data, index) in queries"
+              :key="index"
+              class="bg-gray-800 p-2 rounded-md my-2"
+            >
+              <div class="font-bold">{{data.prompt}}</div>
+              <div v-html="data.response.replaceAll('\n', `<br/>`)"></div>
+            </div>
+          </div>
+          <div class="flex items-center my-2">
+            <input
+              type="text"
+              v-model="prompt"
+              @keydown.enter="askAi"
+              class="p-2 rounded-full grow bg-gray-800 text-white outline-none px-5"
+              placeholder="Enter prompt here"
+            />
+            <!-- <button
+              :disabled="!prompt"
+              @click="askAi"
+              @keydown.enter="askAi"
+              class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Ask AI
+            </button> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="client.js"></script>
+  </body>
+</html>
